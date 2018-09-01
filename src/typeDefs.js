@@ -16,7 +16,7 @@ const typeDefs = `
       userId: String!
     
       # 내용
-      content: Content!
+      content: [ContentInput]!
     ): Post!
   }
 
@@ -27,6 +27,9 @@ const typeDefs = `
   }
   
   type Post {
+    # 게시물 id
+    id: String!
+    
     # 유저 id
     userId: String!
     
@@ -44,6 +47,14 @@ const typeDefs = `
   }
   
   type Content {
+    # 사진 url
+    photo: String!
+    
+    # 설명
+    description: String
+  }
+  
+  input ContentInput {
     # 사진 url
     photo: String!
     
