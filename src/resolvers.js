@@ -61,7 +61,7 @@ const resolvers = {
             const { photo, description } = item;
 
             if (!description) return { photo };
-            
+
             return {
               photo,
               description,
@@ -77,7 +77,41 @@ const resolvers = {
       } catch(e) {
         throw new Error(e);
       }
-    }
+    },
+    async likePost(root, args, context, info) {
+      const { db } = context;
+      const { userId, postId } = args;
+
+      try {
+        const postRef = db.collection('posts').doc(postId);
+        const postSnapshot = await postRef.get();
+
+        const post = postSnapshot.data();
+
+        if (!post) throw new Error('존재하지 않는 게시물 입니다.');
+
+        const newLikes = [...post.likes];
+
+        if (post.likes.includes(userId)) {
+          // 좋아요 취소
+          const userIndex = newLikes.findIndex(n => n === userId);
+          newLikes.splice(userIndex, 1);
+
+          postRef.update({ likes: newLikes });
+        } else {
+          // 좋아요 추가
+          newLikes.push(userId);
+          postRef.update({ likes: newLikes });
+        }
+
+        return {
+          ...post,
+          likes: newLikes,
+        };
+      } catch (e) {
+        throw new Error(e);
+      }
+    },
   },
   User: {
     async createdAt(root) {

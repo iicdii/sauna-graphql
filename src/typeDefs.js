@@ -14,6 +14,10 @@ const typeDefs = `
       userId: ID!
       content: [ContentInput]!
     ): Post!
+    likePost(
+      postId: ID!
+      userId: ID!
+    ): Post!
   }
 
   type User {
