@@ -52,6 +52,9 @@ const resolvers = {
           userId,
           content: content.map(item => {
             const { photo, description } = item;
+
+            if (!description) return { photo };
+            
             return {
               photo,
               description,
