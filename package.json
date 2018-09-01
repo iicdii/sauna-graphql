@@ -9,7 +9,7 @@
     "lodash": "^4.17.10"
   },
   "scripts": {
-    "start": "node src/index.js",
+    "start": "nodemon src/index.js --exec babel-node",
     "dev": "babel-node src/index.js",
     "watch": "nodemon src/index.js --exec babel-node"
   },
