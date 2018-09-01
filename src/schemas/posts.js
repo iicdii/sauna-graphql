@@ -8,13 +8,13 @@ schemas.push(`
   
   extend type Mutation {
     addPost(
-      userId: ID!
+      facebookId: ID!
       title: String!
       content: [ContentInput]!
     ): Post!
     likePost(
       postId: ID!
-      userId: ID!
+      facebookId: ID!
     ): Post!
   }
   
@@ -62,10 +62,14 @@ export const resolvers = {
   Mutation: {
     async addPost(root, args, context, info) {
       const { db, Firestore } = context;
-      const { userId, title, content } = args;
+      const { facebookId, title, content } = args;
       const time = Firestore.FieldValue.serverTimestamp();
 
       try {
+        const usersSnapshot = await db.collection('users').where('facebookId', '==', facebookId).get();
+        const user = usersSnapshot.docs[0].data();
+        const { userId } = user;
+
         const newPostRef = db.collection('posts').doc();
         await newPostRef.set({
           id: newPostRef.id,
@@ -94,7 +98,7 @@ export const resolvers = {
     },
     async likePost(root, args, context, info) {
       const { db } = context;
-      const { userId, postId } = args;
+      const { facebookId, postId } = args;
 
       try {
         const postRef = db.collection('posts').doc(postId);
@@ -106,15 +110,15 @@ export const resolvers = {
 
         const newLikes = [...post.likes];
 
-        if (post.likes.includes(userId)) {
+        if (post.likes.includes(facebookId)) {
           // 좋아요 취소
-          const userIndex = newLikes.findIndex(n => n === userId);
+          const userIndex = newLikes.findIndex(n => n === facebookId);
           newLikes.splice(userIndex, 1);
 
           postRef.update({ likes: newLikes });
         } else {
           // 좋아요 추가
-          newLikes.push(userId);
+          newLikes.push(facebookId);
           postRef.update({ likes: newLikes });
         }
 

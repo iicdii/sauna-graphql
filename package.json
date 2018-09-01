@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "node src/index.js",
+    "dev": "babel-node src/index.js",
     "watch": "nodemon src/index.js --exec babel-node"
   },
   "devDependencies": {
