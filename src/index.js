@@ -3,7 +3,17 @@ const { Firestore, db } = require('./database');
 
 const typeDefs = `
   type Query {
-    greet: String!
+    user(id: ID!): User!
+  }
+
+  type Mutation {
+    addUser(token: String!, username: String!, profileUrl: String!): User! 
+  }
+
+  type User {
+    id: ID!
+    username: String!
+    profileUrl: String!
   }
 `;
 
