@@ -1,7 +1,7 @@
 // language="GraphQL Schema"
 const typeDefs = `
   type Query {
-    posts(offset: Int!, limit: Int!): [Post]!
+    posts(offset: Int, limit: Int): [Post]!
   }
 
   type Mutation {

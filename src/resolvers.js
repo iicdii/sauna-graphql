@@ -1,7 +1,17 @@
 const resolvers = {
   Query: {
     async posts(root, args, context, info) {
-      const { offset, limit } = args;
+      let offset = 0;
+      let limit = 10;
+
+      if (args.offset) {
+        offset = args.offset;
+      }
+
+      if (args.limit) {
+        limit = args.limit;
+      }
+
       const { db } = context;
       const posts = await db.collection('posts').orderBy('updatedAt', 'desc').offset(offset).limit(limit).get();
 
