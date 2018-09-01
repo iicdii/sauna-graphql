@@ -1,4 +1,4 @@
-import schemas from '../schemas';
+const schemas = require('../schemas');
 
 // language="GraphQL Schema"
 schemas.push(`  
@@ -19,7 +19,7 @@ schemas.push(`
   }
 `);
 
-export const resolvers = {
+const resolvers = {
   Mutation: {
     async addUser(root, args, context, info) {
       try {
@@ -59,3 +59,5 @@ export const resolvers = {
     }
   },
 };
+
+module.exports = resolvers;

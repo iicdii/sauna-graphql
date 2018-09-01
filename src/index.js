@@ -1,12 +1,11 @@
-import { GraphQLServer } from 'graphql-yoga';
-import merge from 'lodash/merge';
-import { Firestore, db } from './database';
+const { GraphQLServer } = require('graphql-yoga');
+const merge = require('lodash/merge');
+const { Firestore, db } = require('./database');
 
-import { resolvers as postsResolvers} from './schemas/posts';
-import { resolvers as usersResolvers} from './schemas/users';
+const postsResolvers = require('./schemas/posts').resolvers;
+const usersResolvers = require('./schemas/users').resolvers;
 
-// 스키마 전체
-import schemas from './schemas';
+const schemas = require('./schemas');
 
 // language="GraphQL Schema"
 const rootSchema = `

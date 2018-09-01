@@ -10,7 +10,7 @@
     "nodemon": "^1.18.4"
   },
   "scripts": {
-    "start": "babel-node src/index.js",
+    "start": "node src/index.js",
     "dev": "babel-node src/index.js",
     "watch": "nodemon src/index.js --exec babel-node"
   },

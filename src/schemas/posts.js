@@ -1,4 +1,4 @@
-import schemas from '../schemas';
+const schemas = require('../schemas');
 
 // language="GraphQL Schema"
 schemas.push(`
@@ -39,7 +39,7 @@ schemas.push(`
   }
 `);
 
-export const resolvers = {
+const resolvers = {
   Query: {
     async posts(root, args, context, info) {
       let offset = 0;
@@ -146,3 +146,5 @@ export const resolvers = {
     }
   },
 };
+
+module.exports = resolvers;
