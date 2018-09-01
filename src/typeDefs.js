@@ -1,12 +1,15 @@
 // language="GraphQL Schema"
 const typeDefs = `
   type Query {
-    user(id: ID!): User!
     posts(offset: Int!, limit: Int!): [Post]!
   }
 
   type Mutation {
-    addUser(token: ID!, username: String!, profileUrl: String!): User! 
+    addUser(
+      facebookId: ID!,
+      username: String!,
+      profileUrl: String!
+    ): User! 
     addPost(
       userId: ID!
       content: [ContentInput]!

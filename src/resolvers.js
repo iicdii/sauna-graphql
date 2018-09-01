@@ -1,15 +1,5 @@
 const resolvers = {
   Query: {
-    async user(root, args, context, info) {
-      try {
-        const { db } = context;
-        const { id } = args;
-        const userSnapshot = await db.collection('users').doc(id).get();
-        return userSnapshot.data();
-      } catch (e) {
-        throw new Error(e);
-      }
-    },
     async posts(root, args, context, info) {
       const { offset, limit } = args;
       const { db } = context;
@@ -22,21 +12,27 @@ const resolvers = {
     async addUser(root, args, context, info) {
       try {
         const { db, Firestore } = context;
-        const { username, profileUrl, token } = args;
-        const time = Firestore.FieldValue.serverTimestamp();
+        const { facebookId, username, profileUrl } = args;
 
-        const newUserRef = db.collection('users').doc();
-        await newUserRef.set({
-          id: newUserRef.id,
-          username,
-          profileUrl,
-          token,
-          createdAt: time,
-          updatedAt: time,
-        });
+        const usersSnapshot =  await db.collection('users').where('facebookId', '==', facebookId).get();
+        if (!usersSnapshot.size) {
+          const time = Firestore.FieldValue.serverTimestamp();
+          const newUserRef = db.collection('users').doc();
+          await newUserRef.set({
+            id: newUserRef.id,
+            username,
+            profileUrl,
+            facebookId,
+            createdAt: time,
+            updatedAt: time,
+          });
 
-        const newUserSnapshot = await newUserRef.get();
-        return newUserSnapshot.data();
+          const newUserSnapshot = await newUserRef.get();
+          return newUserSnapshot.data();
+        } else {
+          return usersSnapshot.docs[0].data();
+        }
+
       } catch (e) {
         throw new Error(e);
       }
