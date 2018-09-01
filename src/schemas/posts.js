@@ -9,7 +9,7 @@ schemas.push(`
   extend type Mutation {
     addPost(
       facebookId: ID!
-      title: String!
+      title: String
       content: [ContentInput]!
     ): Post!
     likePost(
@@ -21,7 +21,7 @@ schemas.push(`
   type Post {
     id: ID!
     user: User!
-    title: String!
+    title: String
     likes: [String]!
     content: [Content]!
     createdAt: String!
@@ -68,13 +68,13 @@ export const resolvers = {
       try {
         const usersSnapshot = await db.collection('users').where('facebookId', '==', facebookId).get();
         const user = usersSnapshot.docs[0].data();
-        const { userId } = user;
+        const userId = user.id;
 
         const newPostRef = db.collection('posts').doc();
         await newPostRef.set({
           id: newPostRef.id,
           userId,
-          title,
+          title: title ? title : null,
           content: content.map(item => {
             const { photo, description } = item;
 
