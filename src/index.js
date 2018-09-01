@@ -2,8 +2,8 @@ const { GraphQLServer } = require('graphql-yoga');
 const merge = require('lodash/merge');
 const { Firestore, db } = require('./database');
 
-const postsResolvers = require('./schemas/posts').resolvers;
-const usersResolvers = require('./schemas/users').resolvers;
+const postsResolvers = require('./schemas/posts');
+const usersResolvers = require('./schemas/users');
 
 const schemas = require('./schemas');
 

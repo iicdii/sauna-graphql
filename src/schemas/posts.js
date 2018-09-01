@@ -55,7 +55,7 @@ const resolvers = {
 
       const { db } = context;
       const posts = await db.collection('posts').orderBy('updatedAt', 'desc').offset(offset).limit(limit).get();
-
+      console.log(posts.docs.map(s => s.data()));
       return posts.docs.map(snapshot => snapshot.data());
     }
   },

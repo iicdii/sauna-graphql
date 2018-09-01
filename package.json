@@ -12,7 +12,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "babel-node src/index.js",
-    "watch": "nodemon src/index.js --exec babel-node"
+    "watch": "nodemon src/index.js"
   },
   "devDependencies": {
     "add": "^2.0.6",
