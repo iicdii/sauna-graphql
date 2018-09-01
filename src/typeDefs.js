@@ -6,9 +6,9 @@ const typeDefs = `
   }
 
   type Mutation {
-    addUser(token: String!, username: String!, profileUrl: String!): User! 
+    addUser(token: ID!, username: String!, profileUrl: String!): User! 
     addPost(
-      userId: String!
+      userId: ID!
       content: [ContentInput]!
     ): Post!
   }
@@ -22,7 +22,7 @@ const typeDefs = `
   }
   
   type Post {
-    id: String!
+    id: ID!
     user: User!
     likes: [String]!
     content: [Content]!
