@@ -10,30 +10,28 @@ const resolvers = {
         throw new Error(e);
       }
     },
-    posts: async (root, args, context, info) => {
+    async posts(root, args, context, info) {
       const { db } = context;
+      const posts = await db.collection('posts').get();
 
-      const posts = await db
-        .collection('posts')
-        .get();
-
-      return posts.docs.map(snapshot =>
-        snapshot.data()
-      );
-    },
+      return posts.docs.map(snapshot => snapshot.data());
+    }
   },
   Mutation: {
     async addUser(root, args, context, info) {
       try {
-        const { db } = context;
+        const { db, Firestore } = context;
         const { username, profileUrl, token } = args;
+        const time = Firestore.FieldValue.serverTimestamp();
 
         const newUserRef = db.collection('users').doc();
         await newUserRef.set({
           id: newUserRef.id,
           username,
           profileUrl,
-          token
+          token,
+          createdAt: time,
+          updatedAt: time,
         });
 
         const newUserSnapshot = await newUserRef.get();
@@ -43,25 +41,15 @@ const resolvers = {
       }
     },
     async addPost(root, args, context, info) {
-      const { db } = context;
+      const { db, Firestore } = context;
       const { userId, content } = args;
-
-      const user = await db
-        .collection('users')
-        .doc(userId)
-        .get();
-
-      if (!user) throw new Error('유저가 존재하지 않습니다');
-
-      const { username, profileUrl } = user.data();
+      const time = Firestore.FieldValue.serverTimestamp();
 
       try {
         const newPostRef = db.collection('posts').doc();
         await newPostRef.set({
           id: newPostRef.id,
           userId,
-          username,
-          profileUrl,
           content: content.map(item => {
             const { photo, description } = item;
             return {
@@ -70,16 +58,39 @@ const resolvers = {
             }
           }),
           likes: [],
+          createdAt: time,
+          updatedAt: time,
         });
 
         const newPostSnapShot = await newPostRef.get();
-        console.log(newPostSnapShot.data());
         return newPostSnapShot.data();
       } catch(e) {
         throw new Error(e);
       }
     }
-  }
+  },
+  User: {
+    async createdAt(root) {
+      return root.createdAt.toMillis()
+    },
+    async updatedAt(root) {
+      return root.updatedAt.toMillis();
+    }
+  },
+  Post: {
+    async user(root, args, context, info) {
+      const { userId } = root;
+      const { db } = context;
+      const userSnapshot = await db.collection('users').doc(userId).get();
+      return userSnapshot.data();
+    },
+    async createdAt(root) {
+      return root.createdAt.toMillis();
+    },
+    async updatedAt(root) {
+      return root.updatedAt.toMillis();
+    }
+  },
 };
 
 module.exports = resolvers;
