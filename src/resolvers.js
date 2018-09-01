@@ -41,6 +41,32 @@ const resolvers = {
       } catch (e) {
         throw new Error(e);
       }
+    },
+    addPost: async (root, args, context, info) => {
+      const { db } = context;
+      const { userId, content } = args;
+
+      const user = await db
+        .collection('users')
+        .doc(userId)
+        .get();
+
+      if (!user) throw new Error('유저가 존재하지 않습니다');
+
+      const { username, profileImg } = user;
+
+      const newPostRef = db.collection('posts');
+
+      await newPostRef.set({
+        userId,
+        username,
+        profileImg,
+        content,
+        likes: [],
+      });
+
+      const newPost = newPostRef.get();
+      return newPost.data();
     }
   }
 };

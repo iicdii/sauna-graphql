@@ -1,3 +1,4 @@
+// language="GraphQL Schema"
 const typeDefs = `
   type Query {
     user(id: ID!): User!
@@ -8,6 +9,15 @@ const typeDefs = `
 
   type Mutation {
     addUser(token: String!, username: String!, profileUrl: String!): User! 
+    
+    # 게시물 작성
+    addPost(
+      # 유저 id
+      userId: String!
+    
+      # 내용
+      content: Content!
+    ): Post!
   }
 
   type User {
@@ -20,8 +30,14 @@ const typeDefs = `
     # 유저 id
     userId: String!
     
+    # 유저명
+    username: String!
+    
+    # 유저 프로필 url
+    profileUrl: String
+    
     # 좋아요 갯수
-    likes: Int!
+    likes: [String]!
     
     # 내용
     content: [Content]! 
