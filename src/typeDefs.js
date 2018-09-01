@@ -2,7 +2,7 @@
 const typeDefs = `
   type Query {
     user(id: ID!): User!
-    posts: [Post]!
+    posts(offset: Int!, limit: Int!): [Post]!
   }
 
   type Mutation {

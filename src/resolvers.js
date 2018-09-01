@@ -11,8 +11,9 @@ const resolvers = {
       }
     },
     async posts(root, args, context, info) {
+      const { offset, limit } = args;
       const { db } = context;
-      const posts = await db.collection('posts').get();
+      const posts = await db.collection('posts').orderBy('updatedAt', 'desc').offset(offset).limit(limit).get();
 
       return posts.docs.map(snapshot => snapshot.data());
     }
