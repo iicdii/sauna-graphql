@@ -49,7 +49,7 @@ const resolvers = {
     },
     async addPost(root, args, context, info) {
       const { db, Firestore } = context;
-      const { userId, content } = args;
+      const { userId, title, content } = args;
       const time = Firestore.FieldValue.serverTimestamp();
 
       try {
@@ -57,6 +57,7 @@ const resolvers = {
         await newPostRef.set({
           id: newPostRef.id,
           userId,
+          title,
           content: content.map(item => {
             const { photo, description } = item;
 

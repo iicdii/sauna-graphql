@@ -12,6 +12,7 @@ const typeDefs = `
     ): User! 
     addPost(
       userId: ID!
+      title: String!
       content: [ContentInput]!
     ): Post!
     likePost(
@@ -31,6 +32,7 @@ const typeDefs = `
   type Post {
     id: ID!
     user: User!
+    title: String!
     likes: [String]!
     content: [Content]!
     createdAt: String!
